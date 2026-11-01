@@ -13,7 +13,7 @@ pnpm lint
 
 ## What is real and what is a placeholder
 
-The privacy policy is load-bearing: both stores require its URL. `CLAUDE.md` names the checks its claims rest on and the one still owed before it is published.
+The privacy policy is load-bearing: both stores require its URL. `CLAUDE.md` names the checks its claims rest on and when to re-run them.
 
 Deliberately absent, each for a reason rather than as an oversight:
 
