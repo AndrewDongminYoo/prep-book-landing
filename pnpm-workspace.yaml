@@ -5,6 +5,10 @@ allowBuilds:
 # Compatible security floors for the installed PostCSS 8 and Sharp 0.35 lines.
 # Inspect the resolved consumer graph before changing either version family.
 overrides:
+  # GHSA-g3hv-75wg-m249 is fixed only in 11.0.1. 11.x keeps 10.x's exports map
+  # and engines, so only the 10.x line is moved; eslint plugins call the 3.x
+  # line as a function, which 11.x does not export.
+  minimatch@10: ^11.0.1
   postcss: ">=8.5.32"
   sharp: ">=0.35.5"
 # brace-expansion needs no override: its fixes sit inside the ranges minimatch
