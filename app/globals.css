@@ -1,48 +1,822 @@
 @import "tailwindcss";
 
-:root {
-  /* One light theme, top to bottom. The product's output is a printed
-     production sheet, so the page reads as paper with green ink; a dark mode
-     would show the product in a light it never has. */
-  color-scheme: light;
-
-  /* The app ships Material's default theme and has no brand palette of its
-     own, so every value here comes from the app icon
-     (ios/Runner/Assets.xcassets/AppIcon.appiconset in prep_book), measured
-     pixel by pixel on 2026-11-01. Two are lifted for legibility and say so. */
-  --green: #173f3c; /* icon background */
-  --sheet: #f6e6d1; /* icon notepad */
-  --rule: #d7bfa3; /* icon notepad lines; decorative only, 1.63:1 on --paper */
-  --spoon: #e88238; /* icon spoon and scale; large text on --green only, 4.24:1 */
-  --paper: #fbf5ec; /* lifted from --sheet so a sheet reads as a sheet on the page */
-  --ink: var(--green); /* 10.69:1 on --paper */
-  --ink-dim: #4d6461; /* 5.85:1 on --paper, 5.18:1 on --sheet */
-  --spoon-ink: #a54f1a; /* --spoon darkened for text on --paper, 5.19:1 */
-  --mint: #c9d6d1; /* secondary text on --green, 7.74:1 */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --font-sans: var(--font-korean), "Apple SD Gothic Neo", sans-serif;
 }
 
-@theme inline {
-  --color-green: var(--green);
-  --color-sheet: var(--sheet);
-  --color-rule: var(--rule);
-  --color-spoon: var(--spoon);
-  --color-paper: var(--paper);
-  --color-ink: var(--ink);
-  --color-ink-dim: var(--ink-dim);
-  --color-spoon-ink: var(--spoon-ink);
-  --color-mint: var(--mint);
-  --font-sans: var(--font-noto-sans-kr), ui-sans-serif, system-ui, sans-serif;
+/* The palette and layout come from the operator's v0 design (2026-11-01).
+   One light theme only, as that design sets it. Every text colour below was
+   darkened, hue kept, until it reaches 4.5:1 on --surface, the darkest
+   background that carries text; the design's own greys measured 2.3 to 4.2.
+   The reference coral stays for large headings, icons and decoration, where
+   3:1 is the bar; --primary-ink and --primary-strong carry it at text size. */
+:root {
+  color-scheme: light;
+  --background: #faf9f6;
+  --foreground: #292b26;
+  --primary: #e46a44; /* 3.1:1 on --background: large text and icons only */
+  --primary-ink: #b8502f; /* 4.72:1 on --background */
+  --primary-strong: #c2532f; /* white text on it is 4.59:1 */
+  --muted-foreground: #62645c; /* 5.70:1 on --background, 5.17:1 on --surface */
+  --border: #e5e4dc;
+  --surface: #f0eee7;
+  --green: #66715b;
+}
+
+* {
+  box-sizing: border-box;
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 30px;
 }
 
 body {
-  background: var(--paper);
-  color: var(--ink);
-  /* Korean is the default locale and breaks mid-word without keep-all, which
-     only affects CJK — the English locale behaves as normal. The pair keeps
-     어절 whole while still breaking a word that cannot fit at all, which the
-     8-character 개인정보처리방침 link needs on a 320px screen. */
+  margin: 0;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-korean), "Apple SD Gothic Neo", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  /* Korean breaks mid-word without keep-all; the pair keeps 어절 whole while
+     still breaking a word that cannot fit at all. */
   word-break: keep-all;
   overflow-wrap: break-word;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  font: inherit;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 5px;
+}
+
+.shell {
+  max-width: 1160px;
+  width: calc(100% - 96px);
+  margin-inline: auto;
+}
+
+.site-header {
+  height: 104px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+}
+
+.wordmark {
+  display: inline-flex;
+  gap: 9px;
+  align-items: center;
+  font-size: 25px;
+  font-weight: 750;
+  letter-spacing: -1.2px;
+}
+
+.wordmark > svg {
+  width: 27px;
+  height: 27px;
+  color: var(--primary);
+}
+
+.brand-period {
+  color: var(--primary);
+}
+
+.site-header nav {
+  display: flex;
+  gap: 35px;
+  font-size: 13px;
+  color: #66685f;
+}
+
+.site-header nav a:hover {
+  color: var(--primary-ink);
+}
+
+.header-cta {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 11px 17px;
+  border: 1px solid #d8d9ce;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 52px;
+  align-items: center;
+  padding-block: 64px 66px;
+}
+
+.hero-copy {
+  padding-block: 18px;
+}
+
+.eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.3px;
+  color: #676f5c;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 27px;
+}
+
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #838a70;
+}
+
+.hero h1 {
+  font-size: clamp(42px, 4.6vw, 61px);
+  line-height: 1.3;
+  font-weight: 700;
+  letter-spacing: -3.6px;
+  margin: 0 0 23px;
+}
+
+.hero h1 > span {
+  color: var(--primary);
+}
+
+.hero-description {
+  font-size: 14px;
+  line-height: 1.95;
+  color: #6b6d65;
+  letter-spacing: -0.35px;
+  margin-bottom: 30px;
+}
+
+.primary-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 24px;
+  color: white;
+  background: var(--primary-strong);
+  padding: 16px 23px;
+  font-size: 13px;
+  border-radius: 6px;
+  transition:
+    background 0.2s,
+    transform 0.2s;
+}
+
+.primary-link:hover {
+  background: #a94a2a;
+  transform: translateY(-2px);
+}
+
+.hero-note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: #6c6d66;
+  margin-top: 15px;
+}
+
+.hero-note > span {
+  width: 4px;
+  height: 4px;
+  background: #999c8e;
+  border-radius: 50%;
+}
+
+.hero-audience {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 10px;
+  color: #696d62;
+  margin-top: 37px;
+}
+
+.hero-visual {
+  min-height: 515px;
+  position: relative;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e9e4d9;
+  overflow: hidden;
+  padding: 58px 30px 48px;
+}
+
+.bakery-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photo-label {
+  position: absolute;
+  top: 22px;
+  left: 23px;
+  font-size: 8px;
+  letter-spacing: 1.7px;
+  color: #626453;
+  font-weight: 600;
+}
+
+.recipe-preview {
+  position: relative;
+  width: 100%;
+  max-width: 350px;
+  background: #fffefa;
+  box-shadow: 0 12px 40px #4c3c2824;
+  border: 1px solid #e9e5d9;
+  border-radius: 9px;
+  padding: 23px 24px 16px;
+  transform: rotate(-3deg);
+  margin-top: 15px;
+}
+
+.preview-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 9px;
+  color: #6b6d64;
+}
+
+.preview-topline > span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #6a6e59;
+}
+
+.preview-topline > span:last-child {
+  font-size: 7px;
+  letter-spacing: 1.5px;
+}
+
+.tiny-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #859078;
+}
+
+.recipe-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 17px;
+}
+
+.recipe-heading h2 {
+  font-size: 23px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  margin: 0;
+}
+
+.recipe-heading > span {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 8px;
+  color: #6a6d63;
+}
+
+.recipe-base {
+  font-size: 9px;
+  color: #6b6c64;
+  margin-top: 7px;
+  margin-bottom: 18px;
+}
+
+.recipe-base > span {
+  margin: 0 6px;
+}
+
+.quantity-panel {
+  padding: 12px;
+  background: #f3f3eb;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.quantity-panel > span {
+  font-size: 11px;
+  color: #696e59;
+}
+
+.quantity-panel > div {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.quantity-panel button {
+  background: #fffefa;
+  border: 1px solid #e4e5db;
+  border-radius: 4px;
+  width: 25px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #6a6d5e;
+}
+
+.quantity-panel button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.quantity-value {
+  font-size: 24px;
+  font-weight: 650;
+  min-width: 47px;
+  text-align: center;
+}
+
+.quantity-value small {
+  font-size: 11px;
+  font-weight: 400;
+  margin-left: 5px;
+}
+
+.batch-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 9px;
+  color: #6a6e5f;
+  padding: 12px 1px;
+}
+
+.batch-info b {
+  color: #616b52;
+}
+
+.recipe-preview table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 10px;
+}
+
+.recipe-preview th {
+  font-size: 8px;
+  color: #6b6c66;
+  font-weight: 400;
+  padding: 9px 0;
+  border-top: 1px solid #e9e9df;
+  border-bottom: 1px solid #e9e9df;
+  text-align: left;
+}
+
+.recipe-preview th:not(:first-child),
+.recipe-preview td:not(:first-child) {
+  text-align: right;
+}
+
+.recipe-preview td {
+  padding: 9px 0;
+  border-bottom: 1px solid #f0efe8;
+}
+
+.recipe-preview td:nth-child(2) {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.recipe-preview td:nth-child(2) span {
+  font-weight: 400;
+  color: #6a6d63;
+}
+
+.recipe-preview td:last-child {
+  color: #6a6e61;
+  font-size: 9px;
+}
+
+.preview-bottom {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #6a6d5f;
+  font-size: 8px;
+  margin-top: 12px;
+}
+
+.preview-example {
+  margin-left: auto;
+  font-size: 7px;
+}
+
+.visual-caption {
+  position: absolute;
+  bottom: 15px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  color: #706c5d;
+}
+
+.caption-line {
+  width: 22px;
+  height: 1px;
+  background: #938a74;
+}
+
+.benefit-strip {
+  border-block: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 25px 0;
+}
+
+.benefit-strip > span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  font-size: 12px;
+  color: #6b6d63;
+  border-right: 1px solid var(--border);
+}
+
+.benefit-strip > span:last-child {
+  border: 0;
+}
+
+.benefit-strip svg {
+  width: 17px;
+  height: 17px;
+  stroke-width: 1.5;
+}
+
+.features-section {
+  padding-block: 85px 88px;
+}
+
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 38px;
+}
+
+.section-kicker {
+  font-size: 9px;
+  letter-spacing: 1.8px;
+  color: #6b6d60;
+  font-weight: 600;
+  margin: 0 0 17px;
+}
+
+h2 {
+  font-size: 33px;
+  line-height: 1.48;
+  letter-spacing: -1.5px;
+  font-weight: 650;
+  margin: 0;
+}
+
+.section-heading > p {
+  color: var(--muted-foreground);
+  font-size: 12px;
+  line-height: 1.9;
+  margin: 0 0 5px;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.feature {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 26px;
+  background: #fcfbf8;
+}
+
+.feature-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #686f59;
+  margin-bottom: 25px;
+}
+
+.feature-top > span {
+  color: #6c6d66;
+  font-size: 10px;
+  font-family: monospace;
+}
+
+.feature-tag {
+  font-size: 9px;
+  color: #6a6d5f;
+}
+
+.feature h3 {
+  font-size: 17px;
+  letter-spacing: -0.6px;
+  margin: 8px 0 13px;
+  font-weight: 600;
+}
+
+.feature > p {
+  font-size: 12px;
+  color: var(--muted-foreground);
+  line-height: 1.9;
+  margin: 0;
+  word-break: keep-all;
+}
+
+.feature-detail {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 23px;
+  padding-top: 16px;
+  border-top: 1px solid #eae9e1;
+  font-size: 10px;
+  color: #6a6e5c;
+}
+
+.how-section {
+  background: #f0f0e8;
+  padding: 65px 0 68px;
+}
+
+.how-section h2 {
+  font-size: 30px;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 48px;
+  margin-top: 39px;
+}
+
+.step-number {
+  border-top: 1px solid #d6d9cb;
+  padding-top: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #696e5c;
+  font-size: 12px;
+}
+
+.step h3 {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.4px;
+  margin: 20px 0 10px;
+}
+
+.step p {
+  color: #6a6d5e;
+  font-size: 12px;
+  line-height: 1.8;
+  margin: 0;
+}
+
+.pricing-section {
+  padding-block: 90px;
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.section-description {
+  font-size: 12px;
+  line-height: 2;
+  color: var(--muted-foreground);
+  margin-top: 20px;
+}
+
+.pricing-card {
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 29px;
+  background: #fdfcf9;
+}
+
+.price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.small-label {
+  color: #6a6d60;
+  font-size: 10px;
+}
+
+.price-row h3 {
+  font-size: 19px;
+  letter-spacing: -0.7px;
+  font-weight: 600;
+  margin: 8px 0;
+}
+
+.price-row p {
+  font-size: 11px;
+  color: #6b6d62;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.free-label {
+  padding: 7px 11px;
+  background: #eeefe6;
+  color: #676e56;
+  font-size: 11px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.price-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 24px 0;
+}
+
+.accent-text {
+  color: var(--primary-ink);
+}
+
+.pricing-icon {
+  color: var(--primary);
+}
+
+.price-footnote {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 10px;
+  color: #6a6d61;
+  margin-top: 23px;
+}
+
+.price-footnote > span {
+  margin: 0 4px;
+}
+
+.download-section {
+  text-align: center;
+  border-radius: 12px;
+  background: #f0ede5;
+  padding: 50px 24px 44px;
+}
+
+.download-icon {
+  width: 59px;
+  height: 59px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 22px;
+  border-radius: 14px;
+  background: var(--primary);
+  color: #fff8ed;
+  box-shadow: 0 5px 12px #d46b3420;
+}
+
+.download-section .section-kicker {
+  font-size: 8px;
+}
+
+.download-section h2 {
+  font-size: 33px;
+}
+
+.download-section > p:not(.section-kicker) {
+  font-size: 12px;
+  line-height: 1.9;
+  color: #6c6c61;
+  margin: 19px 0 24px;
+}
+
+.store-badges {
+  display: flex;
+  justify-content: center;
+  gap: 11px;
+}
+
+.store-badges > div,
+.store-badges > a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  border: 1px solid #d5d4c8;
+  background: #f8f6f0;
+  border-radius: 6px;
+  padding: 10px 18px;
+  color: #6c6c60;
+}
+
+.store-badges span {
+  font-size: 15px;
+  letter-spacing: -0.3px;
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+.store-badges small {
+  display: block;
+  font-size: 8px;
+  letter-spacing: 0;
+  font-weight: 400;
+  margin-bottom: 2px;
+  color: #6d6d63;
+}
+
+.download-note {
+  display: block;
+  color: #6d6d63;
+  font-size: 9px;
+  margin-top: 17px;
+}
+
+.site-footer {
+  min-height: 132px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.site-footer .wordmark {
+  font-size: 20px;
+}
+
+.site-footer > span {
+  font-size: 11px;
+  color: #6b6d61;
+}
+
+.site-footer small {
+  font-size: 9px;
+  color: #6b6c63;
+}
+
+/* Not in the v0 design: the privacy policy link is what both stores require,
+   and the contact address and language switch were on the page before. */
+.footer-end {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+
+.footer-links a:hover {
+  color: var(--primary-ink);
 }
 
 /* ---------------------------------------------------------------------------
@@ -51,53 +825,341 @@ body {
    Tailwind's preflight, which strips them.
    --------------------------------------------------------------------------- */
 
+.policy-main {
+  padding-block: 56px 72px;
+  max-width: 760px;
+}
+
 .policy h1 {
-  font-size: 1.875rem;
+  font-size: 30px;
   font-weight: 700;
-  letter-spacing: -0.02em;
-  margin-bottom: 0.75rem;
+  letter-spacing: -1px;
+  margin-bottom: 12px;
 }
 
 .policy h2 {
-  font-size: 1.1875rem;
-  font-weight: 600;
-  margin-top: 2.5rem;
-  margin-bottom: 0.75rem;
+  font-size: 19px;
+  font-weight: 650;
+  letter-spacing: -0.4px;
+  margin-top: 40px;
+  margin-bottom: 12px;
 }
 
 .policy h3 {
-  font-size: 1rem;
+  font-size: 16px;
   font-weight: 600;
-  margin-top: 1.75rem;
-  margin-bottom: 0.5rem;
+  margin-top: 28px;
+  margin-bottom: 8px;
 }
 
 .policy p,
 .policy li {
-  color: var(--ink-dim);
-  line-height: 1.8;
-  margin-bottom: 0.75rem;
+  font-size: 15px;
+  color: var(--muted-foreground);
+  line-height: 1.85;
+  margin-bottom: 12px;
 }
 
 .policy ul {
   list-style: disc;
-  padding-left: 1.5rem;
-  margin-bottom: 0.75rem;
+  padding-left: 24px;
+  margin-bottom: 12px;
 }
 
 .policy ol {
   list-style: decimal;
-  padding-left: 1.5rem;
-  margin-bottom: 0.75rem;
+  padding-left: 24px;
+  margin-bottom: 12px;
 }
 
 .policy a {
-  color: var(--ink);
+  color: var(--foreground);
   text-decoration: underline;
   text-underline-offset: 4px;
 }
 
+.policy a:hover {
+  color: var(--primary-ink);
+}
+
 .policy strong {
-  color: var(--ink);
+  color: var(--foreground);
   font-weight: 600;
+}
+
+@media (min-width: 1440px) {
+  .shell {
+    max-width: 1200px;
+  }
+
+  .hero {
+    gap: 75px;
+  }
+
+  .hero-visual {
+    min-height: 550px;
+  }
+}
+
+@media (max-width: 900px) {
+  .shell {
+    width: calc(100% - 48px);
+  }
+
+  .hero {
+    gap: 28px;
+  }
+
+  .hero h1 {
+    font-size: 45px;
+    letter-spacing: -2.5px;
+  }
+
+  .hero-description {
+    font-size: 12px;
+  }
+
+  .hero-visual {
+    padding-inline: 20px;
+    min-height: 480px;
+  }
+
+  .recipe-preview {
+    padding: 19px;
+  }
+
+  .feature {
+    padding: 20px;
+  }
+
+  .feature h3 {
+    font-size: 15px;
+  }
+
+  .pricing-section {
+    gap: 35px;
+  }
+
+  .hero-audience {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 640px) {
+  .shell {
+    width: calc(100% - 40px);
+  }
+
+  .site-header {
+    height: 78px;
+  }
+
+  .wordmark {
+    font-size: 23px;
+  }
+
+  .site-header nav {
+    display: none;
+  }
+
+  .header-cta {
+    font-size: 10px;
+    padding: 9px 12px;
+    gap: 8px;
+  }
+
+  .hero {
+    grid-template-columns: 1fr;
+    padding-block: 33px 30px;
+    gap: 26px;
+  }
+
+  .hero-copy {
+    padding: 5px 0;
+  }
+
+  .eyebrow {
+    margin-bottom: 20px;
+    font-size: 10px;
+  }
+
+  .hero h1 {
+    font-size: 46px;
+    line-height: 1.27;
+    letter-spacing: -2.6px;
+  }
+
+  .hero-description {
+    font-size: 12px;
+    line-height: 1.9;
+  }
+
+  .primary-link {
+    font-size: 12px;
+    padding: 14px 20px;
+  }
+
+  .hero-audience {
+    margin-top: 25px;
+    font-size: 10px;
+  }
+
+  .hero-visual {
+    min-height: 478px;
+  }
+
+  .recipe-preview {
+    max-width: 310px;
+    padding: 22px;
+  }
+
+  .benefit-strip {
+    grid-template-columns: 1fr 1fr;
+    row-gap: 22px;
+    padding-block: 22px;
+  }
+
+  .benefit-strip > span {
+    font-size: 10px;
+    gap: 6px;
+  }
+
+  .benefit-strip > span:nth-child(2) {
+    border: 0;
+  }
+
+  .features-section {
+    padding-block: 54px;
+  }
+
+  .section-heading {
+    display: block;
+    margin-bottom: 27px;
+  }
+
+  .section-heading > p {
+    margin-top: 17px;
+    font-size: 11px;
+  }
+
+  h2 {
+    font-size: 28px;
+  }
+
+  .section-kicker {
+    font-size: 8px;
+    letter-spacing: 1.5px;
+  }
+
+  .feature-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .feature {
+    padding: 23px;
+  }
+
+  .feature-top {
+    margin-bottom: 16px;
+  }
+
+  .feature h3 {
+    font-size: 18px;
+  }
+
+  .feature > p {
+    font-size: 12px;
+  }
+
+  .feature-detail {
+    margin-top: 18px;
+  }
+
+  .how-section {
+    padding-block: 48px;
+  }
+
+  .how-section h2 {
+    font-size: 26px;
+  }
+
+  .steps {
+    grid-template-columns: 1fr;
+    gap: 27px;
+    margin-top: 29px;
+  }
+
+  .step h3 {
+    margin-top: 14px;
+  }
+
+  .pricing-section {
+    grid-template-columns: 1fr;
+    padding-block: 52px;
+    gap: 25px;
+  }
+
+  .pricing-card {
+    padding: 23px;
+  }
+
+  .price-row h3 {
+    font-size: 17px;
+  }
+
+  .price-row p {
+    font-size: 10px;
+  }
+
+  .download-section {
+    padding: 37px 17px;
+  }
+
+  .download-section h2 {
+    font-size: 28px;
+  }
+
+  .download-section > p:not(.section-kicker) {
+    font-size: 11px;
+  }
+
+  .store-badges > div,
+  .store-badges > a {
+    padding: 9px 12px;
+    gap: 8px;
+  }
+
+  .store-badges span {
+    font-size: 14px;
+  }
+
+  .site-footer {
+    padding-block: 30px;
+    flex-wrap: wrap;
+    gap: 18px;
+  }
+
+  .site-footer > span {
+    font-size: 10px;
+  }
+
+  .site-footer small {
+    width: 100%;
+  }
+
+  .footer-end {
+    align-items: flex-start;
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  * {
+    transition: none !important;
+  }
 }

@@ -2,7 +2,7 @@
 
 Landing page and privacy policy for Prep Book, a recipe scaling app for small restaurants and bakeries.
 
-Next.js App Router, `ko` and `en` under `app/[locale]`, legal text as Markdown under `content/legal`. Same shape as `ttush-push-landing`, from which this repository was started.
+Next.js App Router, `ko` and `en` under `app/[locale]`, legal text as Markdown under `content/legal`. Same shape as `ttush-push-landing`, from which this repository was started; the visual design is the operator's v0 design, ported into these routes.
 
 ```sh
 pnpm install
@@ -17,10 +17,11 @@ The privacy policy is load-bearing: both stores require its URL. `CLAUDE.md` nam
 
 Deliberately absent, each for a reason rather than as an oversight:
 
-| Missing                       | Why                                                                                                     |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------- |
-| Store buttons                 | No store listing exists yet. `lib/site.ts` holds both URLs as `null`, and the page shows them when set. |
-| Screenshots                   | The app repository holds no store screenshots yet. The hero shows the app icon instead.                 |
-| Recipe import on the page     | The store text does not describe it yet, and its device acceptance checks are still open.               |
-| `/download` and `.well-known` | The app declares no App Links or associated domains, so either would assert an unclaimed association.   |
-| Terms of service              | Not written. The app sells a one-time unlock and no subscription.                                       |
+| Missing                       | Why                                                                                                               |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Store links                   | No store listing exists yet. `lib/site.ts` holds both URLs as `null`, and the store badges become links when set. |
+| Screenshots                   | The app repository holds no store screenshots yet. The hero shows a photo and an illustrative production card.    |
+| Recipe import on the page     | The store text does not describe it yet, and its device acceptance checks are still open.                         |
+| Visitor analytics             | The v0 export carried `@vercel/analytics`; the privacy policy covers only the app, so it needs a section first.   |
+| `/download` and `.well-known` | The app declares no App Links or associated domains, so either would assert an unclaimed association.             |
+| Terms of service              | Not written. The app sells a one-time unlock and no subscription.                                                 |

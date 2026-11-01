@@ -1,28 +1,29 @@
-import type { Metadata } from "next";
-import { Noto_Sans_KR } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import localFont from "next/font/local";
 import { notFound } from "next/navigation";
 import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader } from "@/components/site-header";
 import { getDictionary } from "@/lib/dictionaries";
 import { isLocale, locales } from "@/lib/i18n";
 import { appName, ogImage, siteUrl } from "@/lib/site";
 import "../globals.css";
 
-// Noto Sans KR is the face the app itself ships under the OFL
-// (`assets/fonts/NotoSansKR.ttf` in prep_book, bundled for the production
-// sheet's Hangul), so the page and the sheet set type the same way. It covers
-// Latin too, so one face serves both locales.
-// `preload: false` is load-bearing, not a tuning knob. Google splits a Korean
-// face into roughly a hundred unicode-range slices per weight, and next/font
-// self-hosts and preloads every slice of the declared subsets: in the sibling
-// ttush-push-landing, four weights of a Korean face emitted 291 preload links
-// and pulled 2.3 MB of font files on every page. Left to load on demand the
-// browser fetches only the slices whose glyphs are actually on the page.
-const notoSansKr = Noto_Sans_KR({
-  variable: "--font-noto-sans-kr",
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
-  preload: false,
+// Pretendard Variable 1.309, the face the v0 design set, self-hosted under the
+// SIL Open Font License; `app/fonts/OFL.txt` is its licence, fetched from
+// orioncactus/pretendard. It is one 2 MB file holding every glyph, so every
+// page pays for it once; a dynamic-subset build would cut that, and is not
+// done here.
+const pretendard = localFont({
+  src: "../fonts/PretendardVariable.woff2",
+  display: "swap",
+  variable: "--font-korean",
+  weight: "100 900",
 });
+
+export const viewport: Viewport = {
+  colorScheme: "light",
+  themeColor: "#faf9f6",
+};
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -73,8 +74,9 @@ export default async function LocaleLayout({
     notFound();
   }
   return (
-    <html lang={locale} className={`${notoSansKr.variable} antialiased`}>
-      <body className="flex min-h-dvh flex-col bg-paper font-sans text-ink">
+    <html lang={locale} className={pretendard.variable}>
+      <body>
+        <SiteHeader locale={locale} />
         {children}
         <SiteFooter locale={locale} />
       </body>
