@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+:root {
+  /* One light theme, top to bottom. The product's output is a printed
+     production sheet, so the page reads as paper with green ink; a dark mode
+     would show the product in a light it never has. */
+  color-scheme: light;
+
+  /* The app ships Material's default theme and has no brand palette of its
+     own, so every value here comes from the app icon
+     (ios/Runner/Assets.xcassets/AppIcon.appiconset in prep_book), measured
+     pixel by pixel on 2026-11-01. Two are lifted for legibility and say so. */
+  --green: #173f3c; /* icon background */
+  --sheet: #f6e6d1; /* icon notepad */
+  --rule: #d7bfa3; /* icon notepad lines; decorative only, 1.63:1 on --paper */
+  --spoon: #e88238; /* icon spoon and scale; large text on --green only, 4.24:1 */
+  --paper: #fbf5ec; /* lifted from --sheet so a sheet reads as a sheet on the page */
+  --ink: var(--green); /* 10.69:1 on --paper */
+  --ink-dim: #4d6461; /* 5.85:1 on --paper, 5.18:1 on --sheet */
+  --spoon-ink: #a54f1a; /* --spoon darkened for text on --paper, 5.19:1 */
+  --mint: #c9d6d1; /* secondary text on --green, 7.74:1 */
+}
+
+@theme inline {
+  --color-green: var(--green);
+  --color-sheet: var(--sheet);
+  --color-rule: var(--rule);
+  --color-spoon: var(--spoon);
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-ink-dim: var(--ink-dim);
+  --color-spoon-ink: var(--spoon-ink);
+  --color-mint: var(--mint);
+  --font-sans: var(--font-noto-sans-kr), ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  /* Korean is the default locale and breaks mid-word without keep-all, which
+     only affects CJK — the English locale behaves as normal. The pair keeps
+     어절 whole while still breaking a word that cannot fit at all, which the
+     8-character 개인정보처리방침 link needs on a 320px screen. */
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+/* ---------------------------------------------------------------------------
+   Markdown-sourced legal pages. The privacy policy is the page both stores
+   require by URL, so its headings are styled here rather than left to
+   Tailwind's preflight, which strips them.
+   --------------------------------------------------------------------------- */
+
+.policy h1 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.75rem;
+}
+
+.policy h2 {
+  font-size: 1.1875rem;
+  font-weight: 600;
+  margin-top: 2.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.policy h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.policy p,
+.policy li {
+  color: var(--ink-dim);
+  line-height: 1.8;
+  margin-bottom: 0.75rem;
+}
+
+.policy ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.policy ol {
+  list-style: decimal;
+  padding-left: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.policy a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.policy strong {
+  color: var(--ink);
+  font-weight: 600;
+}
