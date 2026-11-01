@@ -55,7 +55,7 @@ const dictionaries: Record<Locale, Dictionary> = {
         },
         {
           title: "재료마다 환산 방식을 고르세요",
-          body: "생산량에 비례하는 재료, 배치마다 같은 양이 들어가는 재료, 전체에 한 번만 넣는 재료, \"적당량\"처럼 수량을 정할 수 없는 재료를 구분합니다. 올림 단위를 정해도 정확한 값은 함께 보관하고 보여 줍니다.",
+          body: '생산량에 비례하는 재료, 배치마다 같은 양이 들어가는 재료, 전체에 한 번만 넣는 재료, "적당량"처럼 수량을 정할 수 없는 재료를 구분합니다. 올림 단위를 정해도 정확한 값은 함께 보관하고 보여 줍니다.',
         },
         {
           title: "생산량을 입력하고 결과를 확인하세요",
@@ -117,7 +117,7 @@ const dictionaries: Record<Locale, Dictionary> = {
         },
         {
           title: "Choose how each ingredient scales",
-          body: "Tell apart ingredients that scale with the quantity, that go into every batch in the same amount, that go in once per run, and that have no fixed amount, such as \"to taste.\" When you round up an amount, the exact value is kept and shown beside it.",
+          body: 'Tell apart ingredients that scale with the quantity, that go into every batch in the same amount, that go in once per run, and that have no fixed amount, such as "to taste." When you round up an amount, the exact value is kept and shown beside it.',
         },
         {
           title: "Enter a quantity and review the result",
