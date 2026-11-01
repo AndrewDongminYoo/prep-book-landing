@@ -1,29 +1,41 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { Fragment } from "react";
+import {
+  ArrowDown,
+  ArrowUpRight,
+  BookOpen,
+  Check,
+  ChefHat,
+  FileText,
+  Layers3,
+  Scale,
+  ShieldCheck,
+  SlidersHorizontal,
+  Smartphone,
+  WifiOff,
+} from "lucide-react";
+import { RecipePreview } from "@/components/recipe-preview";
 import { getDictionary } from "@/lib/dictionaries";
 import { isLocale } from "@/lib/i18n";
 import { appName, appStoreUrl, ogImage, playStoreUrl, siteUrl } from "@/lib/site";
 
-// The hero's button scrolls to the store buttons rather than opening one store:
-// without a /download redirect (see next.config.ts) one link cannot send each
-// platform to its own store.
-const storesId = "stores";
+// The layout is the operator's v0 design (2026-11-01). Icons pair with the
+// dictionary entries by position.
+const benefitIcons = [WifiOff, ShieldCheck, Smartphone, Check] as const;
+const featureIcons = [BookOpen, SlidersHorizontal, Layers3, FileText, WifiOff, Scale] as const;
+const stepIcons = [BookOpen, Scale, FileText] as const;
 
-/**
- * The page's one button shape. Paper on the green bands, because the only
- * buttons on the page sit on green, and paper on green is 10.69:1 where the
- * icon's orange on green is 4.24:1.
- */
-function Cta({ href, label }: { href: string; label: string }) {
-  return (
-    <a
-      href={href}
-      className="inline-block rounded-lg bg-paper px-7 py-3.5 font-semibold text-green transition-transform active:translate-y-px focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-paper"
-    >
-      {label}
-    </a>
-  );
+/** Joins the lines of a heading or paragraph with the breaks the design sets. */
+function Lines({ lines }: { lines: readonly string[] }) {
+  // Fragments, not spans: `.hero h1 > span` colours a span child coral.
+  return lines.map((line, i) => (
+    <Fragment key={line}>
+      {i > 0 ? <br /> : null}
+      {line}
+    </Fragment>
+  ));
 }
 
 export async function generateMetadata({
@@ -62,98 +74,199 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     ...(installUrls.length > 0 ? { installUrl: installUrls } : {}),
   };
 
+  const stores = [
+    { name: "App Store", url: appStoreUrl, Icon: Smartphone },
+    { name: "Google Play", url: playStoreUrl, Icon: ArrowUpRight },
+  ];
+
   return (
-    <main className="flex-1">
+    <main>
       <script
         type="application/ld+json"
         // Static object, no user input. The standard Next.js JSON-LD pattern.
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* Hero, on the icon's own green, so the icon sits on the colour it was
-          drawn on rather than in a frame. */}
-      <section className="bg-green text-paper">
-        <div className="mx-auto grid w-full max-w-6xl items-center gap-12 px-6 pb-16 pt-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,360px)] lg:gap-20 lg:pb-24 lg:pt-24">
-          <div className="max-w-2xl">
-            {/* 20px bold is large text, where the icon's orange on green
-                (4.24:1) passes; at body size it would not. */}
-            <p className="text-xl font-bold text-spoon">{appName}</p>
-            <h1 className="mt-4 text-balance text-4xl font-bold leading-[1.2] tracking-[-0.03em] sm:text-5xl">
-              {dict.hero.tagline}
-            </h1>
-            <p className="mt-6 max-w-[46ch] text-pretty text-lg leading-relaxed text-mint">
-              {dict.hero.sub}
-            </p>
-            {installUrls.length > 0 ? (
-              <div className="mt-9">
-                <Cta href={`#${storesId}`} label={dict.hero.cta} />
-              </div>
-            ) : null}
+      <section className="hero shell">
+        <div className="hero-copy">
+          <div className="eyebrow">
+            <span className="status-dot" /> {dict.hero.eyebrow}
           </div>
+          <h1>
+            <Lines lines={dict.hero.title} />
+            <br />
+            <span>{dict.hero.titleAccent}</span>
+          </h1>
+          <p className="hero-description">
+            <Lines lines={dict.hero.description} />
+          </p>
+          <a href="#features" className="primary-link">
+            {dict.hero.cta} <ArrowDown size={17} aria-hidden />
+          </a>
+          <div className="hero-note">
+            <span /> {dict.hero.note}
+          </div>
+          <div className="hero-audience">
+            <ChefHat size={19} strokeWidth={1.5} aria-hidden />
+            <span>{dict.hero.audience}</span>
+          </div>
+        </div>
+        <div className="hero-visual">
           <Image
-            src="/app-icon.png"
-            alt={dict.hero.iconAlt}
-            width={640}
-            height={640}
+            className="bakery-photo"
+            src="/hero-bakery.jpg"
+            alt={dict.hero.photoAlt}
+            width={928}
+            height={1152}
+            sizes="(max-width: 900px) 100vw, 560px"
             preload
-            sizes="(max-width: 1024px) 60vw, 360px"
-            // The iOS icon mask's corner is about 22 percent of its side.
-            className="mx-auto w-56 rounded-[22%] shadow-[0_24px_60px_-20px_rgba(0,0,0,0.55)] sm:w-64 lg:w-full"
           />
+          <div className="photo-label">{dict.hero.photoLabel}</div>
+          <RecipePreview copy={dict.preview} locale={locale} />
+          <div className="visual-caption">
+            <span className="caption-line" /> {dict.hero.caption}
+          </div>
         </div>
       </section>
 
-      {/* Features, set as one sheet of the icon's notepad: ruled lines between
-          items instead of a card each, because the product's output is a sheet
-          and the page should read like one. */}
-      <section className="mx-auto w-full max-w-6xl px-6 py-20 lg:py-28">
-        <h2 className="text-3xl font-bold tracking-[-0.02em] sm:text-4xl">{dict.features.title}</h2>
-        <ol className="mt-12 grid rounded-2xl border border-rule bg-sheet px-6 sm:px-10 md:grid-cols-2 md:gap-x-12">
-          {dict.features.items.map((item, i) => (
-            <li
-              key={item.title}
-              className="border-b border-rule py-8 last:border-b-0 md:[&:nth-last-child(2):nth-child(odd)]:border-b-0"
-            >
-              <p className="text-sm font-semibold tabular-nums text-spoon-ink">
-                {String(i + 1).padStart(2, "0")}
-              </p>
-              <h3 className="mt-2 text-lg font-semibold">{item.title}</h3>
-              <p className="mt-2 max-w-[52ch] text-pretty leading-relaxed text-ink-dim">
-                {item.body}
-              </p>
-            </li>
-          ))}
-        </ol>
-      </section>
+      <div className="benefit-strip shell">
+        {dict.benefits.map((benefit, i) => {
+          const Icon = benefitIcons[i];
+          return (
+            <span key={benefit}>
+              <Icon aria-hidden /> {benefit}
+            </span>
+          );
+        })}
+      </div>
 
-      <section className="mx-auto w-full max-w-6xl px-6 pb-20 lg:pb-28">
-        <div className="max-w-3xl border-l-4 border-spoon pl-6">
-          <h2 className="text-balance text-2xl font-bold tracking-[-0.02em] sm:text-3xl">
-            {dict.pricing.title}
-          </h2>
-          <p className="mt-4 max-w-[58ch] text-pretty leading-relaxed text-ink-dim">
-            {dict.pricing.body}
+      <section className="features-section shell" id="features">
+        <div className="section-heading">
+          <div>
+            <p className="section-kicker">{dict.features.kicker}</p>
+            <h2>
+              <Lines lines={dict.features.title} />
+            </h2>
+          </div>
+          <p>
+            <Lines lines={dict.features.description} />
           </p>
+        </div>
+        <div className="feature-grid">
+          {dict.features.items.map((item, i) => {
+            const Icon = featureIcons[i];
+            const number = String(i + 1).padStart(2, "0");
+            return (
+              <article className="feature" key={number}>
+                <div className="feature-top">
+                  <Icon size={25} strokeWidth={1.5} aria-hidden />
+                  <span>{number}</span>
+                </div>
+                <span className="feature-tag">{item.tag}</span>
+                <h3>{item.title}</h3>
+                <p>{item.description}</p>
+                <div className="feature-detail">
+                  <Check size={14} aria-hidden />
+                  {item.detail}
+                </div>
+              </article>
+            );
+          })}
         </div>
       </section>
 
-      {/* The page closes on the hero's green: one statement, and the store
-          buttons once the listings exist. */}
-      <section id={storesId} className="bg-green text-paper">
-        <div className="mx-auto w-full max-w-6xl px-6 py-20 lg:py-28">
-          <h2 className="max-w-[24ch] text-balance text-3xl font-bold leading-[1.2] tracking-[-0.02em] sm:text-4xl">
-            {dict.closing.title}
+      <section className="how-section" id="how-it-works">
+        <div className="shell">
+          <p className="section-kicker">{dict.how.kicker}</p>
+          <h2>
+            <Lines lines={dict.how.title} />
           </h2>
-          <p className="mt-5 max-w-[48ch] text-pretty text-lg leading-relaxed text-mint">
-            {dict.closing.status}
+          <div className="steps">
+            {dict.how.steps.map((step, i) => {
+              const Icon = stepIcons[i];
+              const number = String(i + 1).padStart(2, "0");
+              return (
+                <div className="step" key={number}>
+                  <div className="step-number">
+                    {number}
+                    <Icon size={25} strokeWidth={1.5} aria-hidden />
+                  </div>
+                  <h3>{step.title}</h3>
+                  <p>{step.text}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section className="pricing-section shell" id="pricing">
+        <div>
+          <p className="section-kicker">{dict.pricing.kicker}</p>
+          <h2>
+            <Lines lines={dict.pricing.title} />
+          </h2>
+          <p className="section-description">
+            <Lines lines={dict.pricing.description} />
           </p>
-          {installUrls.length > 0 ? (
-            <div className="mt-10 flex flex-wrap gap-4">
-              {appStoreUrl ? <Cta href={appStoreUrl} label={dict.closing.appStore} /> : null}
-              {playStoreUrl ? <Cta href={playStoreUrl} label={dict.closing.playStore} /> : null}
+        </div>
+        <div className="pricing-card">
+          <div className="price-row">
+            <div>
+              <span className="small-label">{dict.pricing.freeLabel}</span>
+              <h3>{dict.pricing.freeTitle}</h3>
+              <p>{dict.pricing.freeText}</p>
             </div>
-          ) : null}
+            <span className="free-label">{dict.pricing.freeBadge}</span>
+          </div>
+          <div className="price-divider" />
+          <div className="price-row">
+            <div>
+              <span className="small-label accent-text">{dict.pricing.paidLabel}</span>
+              <h3>{dict.pricing.paidTitle}</h3>
+              <p>{dict.pricing.paidText}</p>
+            </div>
+            <BookOpen className="pricing-icon" size={27} strokeWidth={1.5} aria-hidden />
+          </div>
+          <div className="price-footnote">
+            <Check size={14} aria-hidden /> {dict.pricing.footnote[0]} <span>·</span>{" "}
+            {dict.pricing.footnote[1]}
+          </div>
         </div>
+      </section>
+
+      <section className="download-section shell" id="download">
+        <div className="download-icon">
+          <BookOpen size={32} strokeWidth={1.6} aria-hidden />
+        </div>
+        <p className="section-kicker">{dict.download.kicker}</p>
+        <h2>
+          <Lines lines={dict.download.title} />
+        </h2>
+        <p>
+          <Lines lines={dict.download.text} />
+        </p>
+        <div className="store-badges">
+          {stores.map(({ name, url, Icon }) => {
+            const body = (
+              <>
+                <Icon size={25} aria-hidden />
+                <span>
+                  <small>{url ? dict.download.available : dict.download.soon}</small>
+                  {name}
+                </span>
+              </>
+            );
+            return url ? (
+              <a key={name} href={url}>
+                {body}
+              </a>
+            ) : (
+              <div key={name}>{body}</div>
+            );
+          })}
+        </div>
+        <span className="download-note">{dict.download.note}</span>
       </section>
     </main>
   );

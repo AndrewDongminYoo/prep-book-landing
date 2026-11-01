@@ -1,38 +1,31 @@
+import { BookOpen } from "lucide-react";
 import Link from "next/link";
 import { getDictionary } from "@/lib/dictionaries";
 import type { Locale } from "@/lib/i18n";
 
 export function SiteFooter({ locale }: { locale: Locale }) {
-  const dict = getDictionary(locale);
+  const copy = getDictionary(locale).footer;
   return (
-    <footer className="mt-auto border-t border-rule">
-      <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-6 py-10 text-sm text-ink-dim sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-col gap-1">
-          <p>{dict.footer.developer}</p>
-          <p>
-            {dict.footer.contact}:{" "}
-            <a
-              className="underline-offset-4 hover:text-ink hover:underline"
-              href="mailto:ydm2790@gmail.com"
-            >
-              ydm2790@gmail.com
-            </a>
-          </p>
-        </div>
-        <nav className="flex flex-wrap gap-x-6 gap-y-2">
-          <Link className="hover:text-ink" href={`/${locale}/privacy`}>
-            {dict.footer.privacy}
-          </Link>
-          <Link
-            className="hover:text-ink"
-            href={dict.footer.languageHref}
-            hrefLang={locale === "ko" ? "en" : "ko"}
-          >
-            {dict.footer.language}
+    <footer className="site-footer shell">
+      <a href={`/${locale}`} className="wordmark">
+        <BookOpen size={22} aria-hidden />
+        <span>
+          prep book<span className="brand-period">.</span>
+        </span>
+      </a>
+      <span>{copy.tagline}</span>
+      <div className="footer-end">
+        <nav className="footer-links">
+          <Link href={`/${locale}/privacy`}>{copy.privacy}</Link>
+          <a href="mailto:ydm2790@gmail.com">{copy.contact}: ydm2790@gmail.com</a>
+          <Link href={copy.languageHref} hrefLang={locale === "ko" ? "en" : "ko"}>
+            {copy.language}
           </Link>
         </nav>
+        <small>
+          © {new Date().getFullYear()} Prep Book. {copy.rights}
+        </small>
       </div>
-      <p className="pb-8 text-center text-xs text-ink-dim">© 2026 Dongmin Yu</p>
     </footer>
   );
 }

@@ -3,6 +3,8 @@ useGitignore: true
 enableGlobDot: true
 ignorePaths:
   - .git
+  # The font licence is kept verbatim as published.
+  - app/fonts/OFL.txt
   - pnpm-lock.yaml
 dictionaries:
   - en-gb
