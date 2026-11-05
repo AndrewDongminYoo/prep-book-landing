@@ -4,7 +4,7 @@ import type { Locale } from "./i18n";
 // visibly parallel: a missing translation is a type error, not a silent
 // fallback to English.
 //
-// The Korean copy comes from the v0 design adopted on
+// The Korean copy is my own original text, from the v0 design adopted on
 // 2026-11-01; the English is a translation of it. It paraphrases the store
 // description in `fastlane/metadata/ios/{ko,en-US}/description.txt` of
 // prep_book, and every claim about the app must still hold against that text
