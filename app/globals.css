@@ -9,7 +9,7 @@
   --font-sans: var(--font-korean), "Apple SD Gothic Neo", sans-serif;
 }
 
-/* The palette and layout come from the operator's v0 design (2026-11-01).
+/* The palette and layout come from the v0 design (2026-11-01).
    One light theme only, as that design sets it. Every text colour below was
    darkened, hue kept, until it reaches 4.5:1 on --surface, the darkest
    background that carries text; the design's own greys measured 2.3 to 4.2.
