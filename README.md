@@ -2,7 +2,7 @@
 
 Landing page and privacy policy for Prep Book, a recipe scaling app for small restaurants and bakeries.
 
-Next.js App Router, `ko` and `en` under `app/[locale]`, legal text as Markdown under `content/legal`. Same shape as `ttush-push-landing`, from which this repository was started; the visual design is Dongmin Yu's v0 design, ported into these routes.
+Next.js App Router, `ko` and `en` under `app/[locale]`, legal text as Markdown under `content/legal`. Same shape as `ttush-push-landing`, from which this repository was started; the visual design is my v0 design, ported into these routes.
 
 ```sh
 pnpm install
