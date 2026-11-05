@@ -21,7 +21,7 @@ import { getDictionary } from "@/lib/dictionaries";
 import { isLocale } from "@/lib/i18n";
 import { appName, appStoreUrl, ogImage, playStoreUrl, siteUrl } from "@/lib/site";
 
-// The layout is the operator's v0 design (2026-11-01). Icons pair with the
+// The layout is the v0 design (2026-11-01). Icons pair with the
 // dictionary entries by position.
 const benefitIcons = [WifiOff, ShieldCheck, Smartphone, Check] as const;
 const featureIcons = [BookOpen, SlidersHorizontal, Layers3, FileText, WifiOff, Scale] as const;
