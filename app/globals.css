@@ -13,15 +13,14 @@
    One light theme only, as that design sets it. Every text colour below was
    darkened, hue kept, until it reaches 4.5:1 on --surface, the darkest
    background that carries text; the design's own greys measured 2.3 to 4.2.
-   The reference coral stays for large headings, icons and decoration, where
-   3:1 is the bar; --primary-ink and --primary-strong carry it at text size. */
+   The accent is the app's brand orange, adopted on 2026-11-20 from the
+   launcher icon background in prep_book. It replaced the design's coral and
+   the coral's two darker text variants, because it reaches 4.5:1 alone. */
 :root {
   color-scheme: light;
   --background: #faf9f6;
   --foreground: #292b26;
-  --primary: #e46a44; /* 3.1:1 on --background: large text and icons only */
-  --primary-ink: #b8502f; /* 4.72:1 on --background */
-  --primary-strong: #c2532f; /* white text on it is 4.59:1 */
+  --primary: #a94424; /* 5.64:1 on --background, 5.07:1 on #f0ede5; white text on it is 5.93:1 */
   --muted-foreground: #62645c; /* 5.70:1 on --background, 5.17:1 on --surface */
   --border: #e5e4dc;
   --surface: #f0eee7;
@@ -111,7 +110,7 @@ a:focus-visible {
 }
 
 .site-header nav a:hover {
-  color: var(--primary-ink);
+  color: var(--primary);
 }
 
 .header-cta {
@@ -178,7 +177,7 @@ a:focus-visible {
   align-items: center;
   gap: 24px;
   color: white;
-  background: var(--primary-strong);
+  background: var(--primary);
   padding: 16px 23px;
   font-size: 13px;
   border-radius: 6px;
@@ -188,7 +187,7 @@ a:focus-visible {
 }
 
 .primary-link:hover {
-  background: #a94a2a;
+  background: #8f3a1e; /* white text on it is 7.52:1 */
   transform: translateY(-2px);
 }
 
@@ -679,7 +678,7 @@ h2 {
 }
 
 .accent-text {
-  color: var(--primary-ink);
+  color: var(--primary);
 }
 
 .pricing-icon {
@@ -715,8 +714,8 @@ h2 {
   margin: 0 auto 22px;
   border-radius: 14px;
   background: var(--primary);
-  color: #fff8ed;
-  box-shadow: 0 5px 12px #d46b3420;
+  color: #fff6e8; /* the brand ivory, 5.54:1 on --primary */
+  box-shadow: 0 5px 12px #a9442420;
 }
 
 .download-section .section-kicker {
@@ -816,7 +815,7 @@ h2 {
 }
 
 .footer-links a:hover {
-  color: var(--primary-ink);
+  color: var(--primary);
 }
 
 /* ---------------------------------------------------------------------------
@@ -879,7 +878,7 @@ h2 {
 }
 
 .policy a:hover {
-  color: var(--primary-ink);
+  color: var(--primary);
 }
 
 .policy strong {
