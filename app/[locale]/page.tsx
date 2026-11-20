@@ -16,6 +16,7 @@ import {
   Smartphone,
   WifiOff,
 } from "lucide-react";
+import { BrandMark } from "@/components/brand-mark";
 import { RecipePreview } from "@/components/recipe-preview";
 import { getDictionary } from "@/lib/dictionaries";
 import { isLocale } from "@/lib/i18n";
@@ -237,7 +238,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
       <section className="download-section shell" id="download">
         <div className="download-icon">
-          <BookOpen size={32} strokeWidth={1.6} aria-hidden />
+          <BrandMark size={32} />
         </div>
         <p className="section-kicker">{dict.download.kicker}</p>
         <h2>

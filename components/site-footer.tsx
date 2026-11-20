@@ -1,5 +1,5 @@
-import { BookOpen } from "lucide-react";
 import Link from "next/link";
+import { BrandMark } from "@/components/brand-mark";
 import { getDictionary } from "@/lib/dictionaries";
 import type { Locale } from "@/lib/i18n";
 
@@ -8,7 +8,7 @@ export function SiteFooter({ locale }: { locale: Locale }) {
   return (
     <footer className="site-footer shell">
       <a href={`/${locale}`} className="wordmark">
-        <BookOpen size={22} aria-hidden />
+        <BrandMark size={22} />
         <span>
           prep book<span className="brand-period">.</span>
         </span>
