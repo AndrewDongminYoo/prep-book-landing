@@ -59,6 +59,11 @@ export async function generateMetadata({
       ],
     },
     twitter: { card: "summary_large_image" },
+    verification: {
+      other: {
+        "naver-site-verification": "552f521aa36eae1096b05953979826578ed6ece3",
+      },
+    },
   };
 }
 
