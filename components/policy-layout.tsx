@@ -10,7 +10,7 @@ import type { Locale } from "@/lib/i18n";
  * written somewhere — this is that somewhere. The site header above it links
  * back to the home page.
  */
-export async function PolicyLayout({ locale, doc }: { locale: Locale; doc: "privacy" }) {
+export async function PolicyLayout({ locale, doc }: { locale: Locale; doc: "privacy" | "terms" }) {
   const markdown = await fs.readFile(
     path.join(process.cwd(), "content", "legal", `${doc}.${locale}.md`),
     "utf8"

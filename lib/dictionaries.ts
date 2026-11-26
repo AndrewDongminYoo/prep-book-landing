@@ -92,6 +92,7 @@ export type Dictionary = {
     tagline: string;
     contact: string;
     privacy: string;
+    terms: string;
     language: string;
     languageHref: string;
     rights: string;
@@ -243,6 +244,7 @@ const dictionaries: Record<Locale, Dictionary> = {
       tagline: "좋은 요리는, 좋은 준비에서.",
       contact: "연락처",
       privacy: "개인정보처리방침",
+      terms: "이용약관",
       language: "English",
       languageHref: "/en",
       rights: "All rights reserved.",
@@ -400,6 +402,7 @@ const dictionaries: Record<Locale, Dictionary> = {
       tagline: "Good cooking starts with good prep.",
       contact: "Contact",
       privacy: "Privacy policy",
+      terms: "Terms of service",
       language: "한국어",
       languageHref: "/ko",
       rights: "All rights reserved.",

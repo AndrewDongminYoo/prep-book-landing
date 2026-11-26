@@ -4,7 +4,7 @@ import { siteUrl } from "@/lib/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return locales.flatMap((locale) =>
-    ["", "/privacy"].map((suffix) => ({
+    ["", "/privacy", "/terms"].map((suffix) => ({
       url: new URL(`/${locale}${suffix}`, siteUrl).toString(),
       lastModified: new Date(),
     }))
