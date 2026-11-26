@@ -13,7 +13,7 @@ pnpm lint     # eslint
 
 ## What this repository is for
 
-The landing page for Prep Book, and the host for what the stores need served from a domain: the support and marketing page at `/{ko,en}` and the privacy policy at `/{ko,en}/privacy`. The app lives in the private repository `AndrewDongminYoo/prep_book`, and its store metadata under `fastlane/metadata/` already points at these four URLs.
+The landing page for Prep Book, and the host for what the stores need served from a domain: the support and marketing page at `/{ko,en}`, the privacy policy at `/{ko,en}/privacy`, and the terms of service at `/{ko,en}/terms`. The app lives in the private repository `AndrewDongminYoo/prep_book`, and its store metadata under `fastlane/metadata/` already points at the first four URLs. The terms URL is the one Google Play's trader status declaration asks for.
 
 The split follows my other landing sites (ttush-push-landing, prism-defense-landing, quest-keeper-landing): a page that changes on its own schedule should not spend the app repository's CI and review rounds.
 
@@ -36,10 +36,11 @@ This page describes software in another repository, which is exactly the shape t
 - The Android permission list was read from the production release merged manifest, produced on 2026-11-01 at `a21ee6e` by `./gradlew :app:processProductionReleaseMainManifest` in the app's `android/` directory, which merges the manifest without compiling or signing: `INTERNET` and `ACCESS_NETWORK_STATE` from ML Kit's `com.google.android.datatransport:transport-backend-cct`, `com.android.vending.BILLING` from `com.android.billingclient:billing`, `DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION` from `androidx.core:core`, and no `CAMERA`. `build/app/outputs/logs/manifest-merger-production-release-report.txt` names each origin. Re-run that task when a dependency changes. Read the release variant, not a debug one, because a debug build adds `INTERNET` on its own.
 - The device-backup paragraph rests on `android/app/src/main/AndroidManifest.xml` setting no `allowBackup`, `fullBackupContent` or `dataExtractionRules`, so Android Auto Backup applies by default, and on no iOS source excluding the database directory (`getDatabasesPath()`, which also holds `unlock-confirmation`) from backup. If the app ever opts out, rewrite that paragraph.
 - The image-copy sentence follows `RecipeImportReviewCubit` and `discardImage` in `lib/presentation/recipe_import/`: the copy is shown during review and deleted when the draft ends.
+- The terms of service follow the structure of prism-defense-landing's terms, which also cover a one-time store purchase. Their claims about the app rest on `prep_book` as it read on 2026-11-26: the one-recipe trial and the one-time unlock in the design document's "Pricing and unlock"; a refund returning the device to the trial while existing recipes stay usable, in the same section and `docs/domain/unlock-and-trial.md`; imported values saved only after confirmation, in the store description. The terms and the privacy policy describe the same app, so read both side by side when either changes.
 
 ## Do not invent
 
-`lib/site.ts` holds both store URLs as `null` until each listing answers 200; do not guess an App Store id. The store badges in the download section turn into links when a URL is set, but the header button, `hero.note` and `download.text` in `lib/dictionaries.ts` still say the release is being prepared; change them in the same commit. No terms of service unless someone writes them: the app sells a one-time unlock and no subscription. No `/download` redirect or `.well-known` files until the app declares App Links or associated domains; `next.config.ts` says why.
+`lib/site.ts` holds both store URLs as `null` until each listing answers 200; do not guess an App Store id. The store badges in the download section turn into links when a URL is set, but the header button, `hero.note` and `download.text` in `lib/dictionaries.ts` still say the release is being prepared; change them in the same commit. No `/download` redirect or `.well-known` files until the app declares App Links or associated domains; `next.config.ts` says why.
 
 ## Maintenance Verification
 

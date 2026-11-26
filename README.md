@@ -1,6 +1,6 @@
 # prep-book-landing
 
-Landing page and privacy policy for Prep Book, a recipe scaling app for small restaurants and bakeries.
+Landing page, privacy policy and terms of service for Prep Book, a recipe scaling app for small restaurants and bakeries.
 
 Next.js App Router, `ko` and `en` under `app/[locale]`, legal text as Markdown under `content/legal`. Same shape as `ttush-push-landing`, from which this repository was started; the visual design is my v0 design, ported into these routes.
 
@@ -13,7 +13,7 @@ pnpm lint
 
 ## What is real and what is a placeholder
 
-The privacy policy is load-bearing: both stores require its URL. `CLAUDE.md` names the checks its claims rest on and when to re-run them.
+The privacy policy is load-bearing: both stores require its URL. The terms of service are load-bearing too: Google Play's trader status declaration asks for a terms URL. `CLAUDE.md` names the checks their claims rest on and when to re-run them.
 
 Deliberately absent, each for a reason rather than as an oversight:
 
@@ -24,4 +24,3 @@ Deliberately absent, each for a reason rather than as an oversight:
 | Recipe import on the page     | The store text does not describe it yet, and its device acceptance checks are still open.                         |
 | Visitor analytics             | The v0 export carried `@vercel/analytics`; the privacy policy covers only the app, so it needs a section first.   |
 | `/download` and `.well-known` | The app declares no App Links or associated domains, so either would assert an unclaimed association.             |
-| Terms of service              | Not written. The app sells a one-time unlock and no subscription.                                                 |

@@ -17,6 +17,7 @@ export function SiteFooter({ locale }: { locale: Locale }) {
       <div className="footer-end">
         <nav className="footer-links">
           <Link href={`/${locale}/privacy`}>{copy.privacy}</Link>
+          <Link href={`/${locale}/terms`}>{copy.terms}</Link>
           <a href="mailto:ydm2790@gmail.com">{copy.contact}: ydm2790@gmail.com</a>
           <Link href={copy.languageHref} hrefLang={locale === "ko" ? "en" : "ko"}>
             {copy.language}
